@@ -31,8 +31,10 @@
       (assoc :moves-left init-moves-left)
       (assoc :cells init-cells)))
 
-
-                
-                       
+(defn occupied?
+  "If the current position is occupied, return the piece"
+  ([state x y] (occupied? state (idx x y)))
+  ([state idx] (get (:cells state) idx)))
+                                       
 
 
