@@ -27,9 +27,9 @@
 
 (def start
   "The starting state." 
-  (-> {}
-      (assoc :moves-left init-moves-left)
-      (assoc :cells init-cells)))
+  {:moves-left init-moves-left
+   :cells init-cells
+   :moves []})
 
 (defn occupied?
   "If the current position is occupied, return the piece"
