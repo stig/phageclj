@@ -32,18 +32,18 @@
    :moves []})
 
 (defn occupied?
-  "If the current position is occupied, return the piece"
+  "If the current position is occupied, return the piece."
   ([state x y] (occupied? state (idx x y)))
   ([state idx] (get (:cells state) idx)))
 
 (defn moves-left?
-  "Return the number of moves left for a piece, or nil if not a piece"
+  "Return the number of moves left for a piece, or nil if not a piece."
   [state x y]
   (if-some [piece (occupied? state x y)]
     (piece (:moves-left state))))
                                     
 (defn player-turn?
-  "Truthy if the piece specified belongs to current player"
+  "Truthy if the piece specified belongs to current player."
   [state x y]
   (if-some [piece (occupied? state x y)]
     (if (= 0 (mod (count (:moves state)) 2))
