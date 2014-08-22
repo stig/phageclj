@@ -10,11 +10,11 @@
                                               :c 1 :s 1 :t 1 :d 1}))
     (is (= (occupied? start 0 0) :d))
     (is (= (occupied? start 7 7) :D))
-    (is (= (occupied? start 0 1) nil))
+    (is (nil? (occupied? start 0 1)))
 
     (is (= (moves-left? start 0 0) 7))
-    (is (= (moves-left? start 0 1) nil)))
+    (is (nil? (moves-left? start 0 1))))
 
   (testing "mobility"
     (is (= (player-turn? start 0 0) :d))
-    (is (= (player-turn? start 7 7) nil))))
+    (is (nil? (player-turn? start 7 7)))))
