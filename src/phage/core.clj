@@ -29,7 +29,7 @@
   "The starting state." 
   {:moves-left init-moves-left
    :cells init-cells
-   :moves []})
+   :history []})
 
 (defn occupied?
   "If the current position is occupied, return the piece."
@@ -46,7 +46,7 @@
   "Truthy if the piece specified belongs to current player."
   [state x y]
   (if-some [piece (occupied? state x y)]
-    (if (= 0 (mod (count (:moves state)) 2))
+    (if (= 0 (mod (count (:history state)) 2))
       (piece #{:c :d :s :t})
       (piece #{:C :D :S :T}))))
       
