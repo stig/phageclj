@@ -17,7 +17,13 @@
 
   (testing "mobility"
     (is (= (player-turn? start [0 0]) :d))
-    (is (nil? (player-turn? start [7 7])))))
+    (is (nil? (player-turn? start [7 7])))
+
+    (is (legal-move? start [[0 0] [0 1]]))
+    (is (nil? (legal-move? start [[0 0] [1 1]])))
+    
+    (is (legal-move? start [[6 5] [6 4]]))
+    (is (nil? (legal-move? start [[6 5] [7 5]])))))
 
 ;(deftest making-moves
 ;  (testing "first move"
