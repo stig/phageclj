@@ -50,9 +50,8 @@
 
 (defn moves-left?
   "Return the number of moves left for a piece, or nil if not a piece."
-  [state xy]
-  (if-some [piece (occupied? state xy)]
-    (piece (:moves-left state))))
+  [state piece]
+  ((:moves-left state) piece))
                                     
 (defn player-turn?
   "Truthy if the piece specified belongs to current player."
@@ -97,7 +96,7 @@
   [state [from to]]
   (when (straight-line? [from to])
     (when-some [piece (occupied? state from)]
-      (when (moves-left? state from)
+      (when (moves-left? state piece)
         (when-some [v ((piece-vectors piece) (move-vector [from to]))]
           (path-free? state from to v))))))
 

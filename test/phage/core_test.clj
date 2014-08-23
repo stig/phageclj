@@ -12,8 +12,8 @@
     (is (= (occupied? start [7 7]) :D))
     (is (nil? (occupied? start [0 1])))
 
-    (is (= (moves-left? start [0 0]) 7))
-    (is (nil? (moves-left? start [0 1]))))
+    (is (= (moves-left? start :d) 7))
+    (is (nil? (moves-left? start 0))))
 
   (testing "mobility"
     (is (= (player-turn? start [0 0]) :d))
