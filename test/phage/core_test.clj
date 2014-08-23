@@ -15,6 +15,18 @@
     (is (= (moves-left? start :d) 7))
     (is (nil? (moves-left? start 0))))
 
+  (testing "to-string"
+    (is (= (to-string start)
+           (str "7 .......D\n"
+                "6 .....T..\n"
+                "5 ...S....\n"
+                "4 .C......\n"
+                "3 ......c.\n"
+                "2 ....s...\n"
+                "1 ..t.....\n"
+                "0 d.......\n"
+                "  01234567"))))
+
   (testing "mobility"
     (is (= (player-turn? start [0 0]) :d))
     (is (nil? (player-turn? start [7 7])))

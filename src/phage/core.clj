@@ -109,3 +109,17 @@
           (update-in [:moves-left piece] dec)
           (assoc-in [:cells (idx from)] :x)
           (assoc-in [:cells (idx to)] piece)))))
+
+(defn to-string
+  "Return a string representation of the board."
+  [state]
+  (let [rows (->> state
+                  (:cells)
+                  (map (fn [x] (if (keyword? x) (name x) ".")))
+                  (partition n-rows)
+                  (map #(apply str %))
+                  (map-indexed (fn [i s] (str i " " s)))
+                  (reverse)
+                  (vec))]
+    (clojure.string/join "\n" (conj rows "  01234567"))))
+
