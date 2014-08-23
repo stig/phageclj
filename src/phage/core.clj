@@ -22,8 +22,9 @@
 
 (defn- idx
   "Find index for row/column."
-  [row column]
-  (+ (* row n-columns) column))
+  ([[row column]] (idx row column))
+  ([row column] (+ (* row n-columns) column)))
+
 
 (def ^:private init-cells 
   (-> (repeat (* n-rows n-columns) nil)
@@ -96,11 +97,16 @@
   [state [from to]]
   (when (straight-line? [from to])
     (when-some [piece (occupied? state from)]
-      (when-some [v ((piece-vectors piece) (move-vector [from to]))]
-        (path-free? state from to v)))))
-
+      (when (moves-left? state from)
+        (when-some [v ((piece-vectors piece) (move-vector [from to]))]
+          (path-free? state from to v))))))
 
 (defn successor
-  "Perform a move. Return the new state, or nil on error."
-  [state move]
-  )
+  "Perform a move. Returns the new state, or nil on error."
+  [state [from to]]
+  (when (legal-move? state [from to])
+    (let [piece (occupied? state from)]
+      (-> state
+          (update-in [:moves-left piece] dec)
+          (assoc-in [:cells (idx from)] :x)
+          (assoc-in [:cells (idx to)] piece)))))
