@@ -15,18 +15,6 @@
     (is (= (moves-left? start :d) 7))
     (is (nil? (moves-left? start 0))))
 
-  (testing "to-string"
-    (is (= (to-string start)
-           (str "7 .......D\n"
-                "6 .....T..\n"
-                "5 ...S....\n"
-                "4 .C......\n"
-                "3 ......c.\n"
-                "2 ....s...\n"
-                "1 ..t.....\n"
-                "0 d.......\n"
-                "  01234567"))))
-
   (testing "mobility"
     (is (= (player-turn? start [0 0]) :d))
     (is (nil? (player-turn? start [7 7])))
@@ -36,6 +24,7 @@
     
     (is (legal-move? start [[6 5] [6 4]]))
     (is (nil? (legal-move? start [[6 5] [7 5]])))))
+
 
 (deftest making-moves
   (testing "first move"
@@ -47,3 +36,31 @@
       (is (= (occupied? s1 [0 1]) :d))
 
       (is (not (legal-move? s1 [[0 1] [0 0]]))))))
+
+
+(deftest stringification
+  (testing "starting position"
+    (is (= (to-string start)
+           (str "7 .......D\n"
+                "6 .....T..\n"
+                "5 ...S....\n"
+                "4 .C......\n"
+                "3 ......c.\n"
+                "2 ....s...\n"
+                "1 ..t.....\n"
+                "0 d.......\n"
+                "  01234567"))))
+
+  (testing "after 1 move"
+    (is (= (-> start
+               (successor [[0 0] [0 2]])
+               (to-string))
+           (str "7 .......D\n"
+                "6 .....T..\n"
+                "5 ...S....\n"
+                "4 .C......\n"
+                "3 ......c.\n"
+                "2 ....s...\n"
+                "1 ..t.....\n"
+                "0 x.d.....\n"
+                "  01234567")))))
