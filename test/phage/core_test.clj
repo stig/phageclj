@@ -8,37 +8,39 @@
     (is (= (-> start (:cells) (frequencies)) {nil 56
                                               :C 1 :S 1 :T 1 :D 1
                                               :c 1 :s 1 :t 1 :d 1}))
-    (is (= (occupied? start [0 0]) :d))
-    (is (= (occupied? start [7 7]) :D))
-    (is (nil? (occupied? start [0 1])))
+    (is (= (occupied? start 0) :d))
+    (is (= (occupied? start (idx 7 7)) :D))
+    (is (nil? (occupied? start (idx 0 1))))
 
     (is (= (moves-left? start :d) 7))
+    (is (nil? (moves-left? start :x)))
+    (is (nil? (moves-left? start :X)))
     (is (nil? (moves-left? start 0))))
 
   (testing "mobility"
-    (is (= (player-turn? start [0 0]) :d))
-    (is (nil? (player-turn? start [7 7])))
+    (is (= (player-turn? start 0) :d))
+    (is (nil? (player-turn? start (idx 7 7))))
 
-    (is (legal-move? start [[0 0] [0 1]]))
-    (is (nil? (legal-move? start [[0 0] [1 1]])))
+    (is (legal-move? start [0 1]))
+    (is (nil? (legal-move? start [0 (idx  1 1)])))
     (is (-> start
             (assoc-in [:legal-moves :d] 0)
-            (legal-move? [[0 0] [0 1]])))    
+            (legal-move? [0 1])))    
 
-    (is (legal-move? start [[6 5] [6 4]]))
-    (is (nil? (legal-move? start [[6 5] [7 5]])))))
+    (is (legal-move? start [(idx 6 5) (idx 6 4)]))
+    (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))))
 
 
 (deftest making-moves
   (testing "first move"
-    (let [s1 (successor start [[0 0] [0 1]])]
+    (let [s1 (successor start [0 1])]
       (is (= (-> s1 (:cells) (frequencies) { nil 55 :x 1
                                             :C 1 :S 1 :T 1 :D 1
                                             :c 1 :s 1 :t 1 :d 1})))
-      (is (= (occupied? s1 [0 0]) :x))
-      (is (= (occupied? s1 [0 1]) :d))
+      (is (= (occupied? s1 0) :x))
+      (is (= (occupied? s1 1) :d))
 
-      (is (not (legal-move? s1 [[0 1] [0 0]]))))))
+      (is (not (legal-move? s1 [1 0]))))))
 
 
 (deftest stringification
@@ -61,7 +63,7 @@
 
   (testing "after 1 move"
     (is (= (-> start
-               (successor [[0 0] [0 2]])
+               (successor [0 2])
                (to-string))
            (str "7 .......D\n"
                 "6 .....T..\n"
@@ -80,8 +82,8 @@
 
 (testing "after 2 moves"
     (is (= (-> start
-               (successor [[0 0] [0 2]])
-               (successor [[4 1] [4 4]])
+               (successor [0 2])
+               (successor [(idx 4 1) (idx 4 4)])
                (to-string))
            (str "7 .......D\n"
                 "6 .....T..\n"

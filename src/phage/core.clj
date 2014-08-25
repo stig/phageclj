@@ -20,11 +20,15 @@
                               :t #{[0 -1] [0 1] [1 0]}
                               :T #{[0 -1] [0 1] [-1 0]}})
 
-(defn- idx
+(defn idx
   "Find index for row/column."
   ([[row column]] (idx row column))
   ([row column] (+ (* row n-columns) column)))
 
+(defn coord
+  "Find row/column from index."
+  [idx]
+  [(quot idx n-columns) (rem idx n-columns)])
 
 (def ^:private init-cells 
   (-> (repeat (* n-rows n-columns) nil)
@@ -46,7 +50,7 @@
 
 (defn occupied?
   "If the current position is occupied, return the piece."
-  ([state [x y]] (get (:cells state) (idx x y))))
+  ([state x] (get (:cells state) x)))
 
 (defn moves-left?
   "Return the number of moves left for a piece, or nil if not a piece."
@@ -66,24 +70,28 @@
       
 (defn straight-line?
   "Cheap check for ruling out illegal move destinations."
-  [[[x0 y0] [x1 y1]]]
-  (or
-   (= x0 x1)
-   (= y0 y1)
-   (= (- x1 x0) (- y1 y0))))
+  [from to]
+  (let [[x0 y0] (coord from)
+        [x1 y1] (coord to)]
+    (or
+     (= x0 x1)
+     (= y0 y1)
+     (= (- x1 x0) (- y1 y0)))))
 
 (defn- v [x] 
   (if (< x 0) -1 (if (> x 0) 1 0)))
 
 (defn move-vector
   "Finds vector from move."
-  [[[x0 y0] [x1 y1]]] 
-  (let [xd (- x1 x0) yd (- y1 y0)]
+  [from to]
+  (let [[x0 y0] (coord from)
+        [x1 y1] (coord to) 
+        xd (- x1 x0) yd (- y1 y0)]
     [(v xd) (v yd)]))
 
 (defn- new-pos
-  [[x y] [xd yd]]
-  [(+ x xd) (+ y yd)])
+  [idx [xd yd]]
+  (+ idx (* xd n-rows) yd))
 
 (defn- path-free?
   "Checks whether the path from one location to another is free."
@@ -97,10 +105,10 @@
 (defn legal-move?
   "Determines whether a move is legal."
   [state [from to]]
-  (when (straight-line? [from to])
+  (when (straight-line? from to)
     (when-some [piece (occupied? state from)]
       (when (moves-left? state piece)
-        (when-some [v ((piece-vectors piece) (move-vector [from to]))]
+        (when-some [v ((piece-vectors piece) (move-vector from to))]
           (path-free? state from to v))))))
 
 (defn successor
@@ -110,8 +118,8 @@
     (let [piece (occupied? state from)]
       (-> state
           (update-in [:moves-left piece] dec)
-          (assoc-in [:cells (idx from)] (if (piece player-1-pieces) :x :X))
-          (assoc-in [:cells (idx to)] piece)))))
+          (assoc-in [:cells from] (if (piece player-1-pieces) :x :X))
+          (assoc-in [:cells to] piece)))))
 
 (defn- moves-left
   [s p] (str "  " (name p) ":" (moves-left? s p)))
