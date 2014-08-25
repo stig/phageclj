@@ -120,6 +120,15 @@
                   (map #(apply str %))
                   (map-indexed (fn [i s] (str i " " s)))
                   (reverse)
-                  (vec))]
-    (clojure.string/join "\n" (conj rows "  01234567"))))
+                  (vec))
+        
+        cols ["  01234567\n"]
+
+        meta (-> [] 
+                 (conj (str "  C:" (moves-left? state :C) "  c:" (moves-left? state :c)))
+                 (conj (str "  S:" (moves-left? state :S) "  s:" (moves-left? state :s)))
+                 (conj (str "  T:" (moves-left? state :T) "  t:" (moves-left? state :t)))
+                 (conj (str "  D:" (moves-left? state :D) "  d:" (moves-left? state :d))))]
+    
+    (clojure.string/join "\n" (concat rows cols meta))))
 
