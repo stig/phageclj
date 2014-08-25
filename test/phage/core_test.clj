@@ -21,7 +21,10 @@
 
     (is (legal-move? start [[0 0] [0 1]]))
     (is (nil? (legal-move? start [[0 0] [1 1]])))
-    
+    (is (-> start
+            (assoc-in [:legal-moves :d] 0)
+            (legal-move? [[0 0] [0 1]])))    
+
     (is (legal-move? start [[6 5] [6 4]]))
     (is (nil? (legal-move? start [[6 5] [7 5]])))))
 
