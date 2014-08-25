@@ -113,6 +113,9 @@
           (assoc-in [:cells (idx from)] (if (piece player-1-pieces) :x :X))
           (assoc-in [:cells (idx to)] piece)))))
 
+(defn- moves-left
+  [s p] (str "  " (name p) ":" (moves-left? s p)))
+
 (defn to-string
   "Return a string representation of the board."
   [state]
@@ -128,10 +131,10 @@
         cols ["  01234567\n"]
 
         meta (-> [] 
-                 (conj (str "  C:" (moves-left? state :C) "  c:" (moves-left? state :c)))
-                 (conj (str "  S:" (moves-left? state :S) "  s:" (moves-left? state :s)))
-                 (conj (str "  T:" (moves-left? state :T) "  t:" (moves-left? state :t)))
-                 (conj (str "  D:" (moves-left? state :D) "  d:" (moves-left? state :d))))]
+                 (conj (str (moves-left state :C) (moves-left state :c)))
+                 (conj (str (moves-left state :S) (moves-left state :s)))
+                 (conj (str (moves-left state :T) (moves-left state :t)))
+                 (conj (str (moves-left state :D) (moves-left state :d))))]
     
     (clojure.string/join "\n" (concat rows cols meta))))
 
