@@ -52,14 +52,17 @@
   "Return the number of moves left for a piece, or nil if not a piece."
   [state piece]
   ((:moves-left state) piece))
-                                    
+                            
+(def player-1-pieces #{:c :d :s :t})
+(def player-2-pieces #{:C :D :S :T})
+        
 (defn player-turn?
   "Truthy if the piece specified belongs to current player."
   [state xy]
   (if-some [piece (occupied? state xy)]
     (if (= 0 (mod (count (:history state)) 2))
-      (piece #{:c :d :s :t})
-      (piece #{:C :D :S :T}))))
+      (piece player-1-pieces)
+      (piece player-2-pieces))))
       
 (defn straight-line?
   "Cheap check for ruling out illegal move destinations."
@@ -107,7 +110,7 @@
     (let [piece (occupied? state from)]
       (-> state
           (update-in [:moves-left piece] dec)
-          (assoc-in [:cells (idx from)] :x)
+          (assoc-in [:cells (idx from)] (if (piece player-1-pieces) :x :X))
           (assoc-in [:cells (idx to)] piece)))))
 
 (defn to-string
