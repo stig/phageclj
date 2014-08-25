@@ -125,8 +125,7 @@
                   (partition n-rows)
                   (map #(apply str %))
                   (map-indexed (fn [i s] (str i " " s)))
-                  (reverse)
-                  (vec))
+                  (reverse))
         
         cols ["  01234567\n"]
 
