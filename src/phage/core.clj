@@ -124,6 +124,12 @@
                 [f t])]
     (not-any? #(legal-move? state %) moves)))
 
+(defn draw?
+  "Returns true if the game is a draw."
+  [state]
+  (-> state
+      (update-in [:history] (fn [x] (conj x [0 0])))
+      (game-over?)))
 
 (defn- moves-left
   [s p] (str "  " (name p) ":" (moves-left? s p)))

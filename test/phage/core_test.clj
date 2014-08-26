@@ -42,14 +42,18 @@
 
 (deftest game-over
   (testing "nowhere to go"
-    (let [cells (->> start
-                     (:cells)
-                     (replace {nil :x}))
+    (let [cells (->> start (:cells) (replace {nil :x}))
           s1 (assoc start :cells cells)]
-      (is (game-over? s1))))
+      (is (game-over? s1))
+      (is (draw? s1))))
   (testing "no moves left"
-    (let [s1 (assoc start :moves-left {})]
-      (is (game-over? s1)))))
+    (let [s1 (-> start (assoc :moves-left {}))]
+      (is (game-over? s1))
+      (is (draw? s1))))
+  (testing "not a draw?"
+    (let [s1 (-> start (assoc :moves-left {:T 1}))]
+      (is (game-over? s1))
+      (is (not (draw? s1))))))
 
 (deftest stringification
   (testing "starting position"
