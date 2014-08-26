@@ -30,7 +30,6 @@
     (is (legal-move? start [(idx 6 5) (idx 6 4)]))
     (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))))
 
-
 (deftest making-moves
   (testing "first move"
     (let [s1 (successor start [0 1])]
@@ -39,9 +38,18 @@
                                             :c 1 :s 1 :t 1 :d 1})))
       (is (= (occupied? s1 0) :x))
       (is (= (occupied? s1 1) :d))
-
       (is (not (legal-move? s1 [1 0]))))))
 
+(deftest game-over
+  (testing "nowhere to go"
+    (let [cells (->> start
+                     (:cells)
+                     (replace {nil :x}))
+          s1 (assoc start :cells cells)]
+      (is (game-over? s1))))
+  (testing "no moves left"
+    (let [s1 (assoc start :moves-left {})]
+      (is (game-over? s1)))))
 
 (deftest stringification
   (testing "starting position"
@@ -80,7 +88,7 @@
                 "  T:7  t:7\n"
                 "  D:7  d:6"))))
 
-(testing "after 2 moves"
+  (testing "after 2 moves"
     (is (= (-> start
                (successor [0 2])
                (successor [(idx 4 1) (idx 4 4)])

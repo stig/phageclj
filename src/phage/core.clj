@@ -59,14 +59,18 @@
                             
 (def player-1-pieces #{:c :d :s :t})
 (def player-2-pieces #{:C :D :S :T})
-        
+
+(defn player-pieces
+  [state]
+  (if (= 0 (rem (count (:history state)) 2))
+    player-1-pieces
+    player-2-pieces))
+
 (defn player-turn?
   "Truthy if the piece specified belongs to current player."
   [state xy]
-  (if-some [piece (occupied? state xy)]
-    (if (= 0 (mod (count (:history state)) 2))
-      (piece player-1-pieces)
-      (piece player-2-pieces))))
+  (when-some [piece (occupied? state xy)]
+    (piece (player-pieces state))))
       
 (defn straight-line?
   "Cheap check for ruling out illegal move destinations."
@@ -105,11 +109,12 @@
 (defn legal-move?
   "Determines whether a move is legal."
   [state [from to]]
-  (when (straight-line? from to)
-    (when-some [piece (occupied? state from)]
-      (when (moves-left? state piece)
-        (when-some [v ((piece-vectors piece) (move-vector from to))]
-          (path-free? state from to v))))))
+  (when-some [piece (occupied? state from)]
+    (when (contains? (:cells state) to)
+      (when (straight-line? from to)
+        (when (moves-left? state piece)
+          (when-some [v ((piece-vectors piece) (move-vector from to))]
+            (path-free? state from to v)))))))
 
 (defn successor
   "Perform a move. Returns the new state, or nil on error."
@@ -120,6 +125,17 @@
           (update-in [:moves-left piece] dec)
           (assoc-in [:cells from] (if (piece player-1-pieces) :x :X))
           (assoc-in [:cells to] piece)))))
+
+(defn game-over?
+  "Returns true if game is over."
+  [state]
+  (let [moves (for [p (player-pieces state)
+                    v (piece-vectors p)
+                    :let [f (.indexOf (:cells start) p) 
+                          t (new-pos f v)]]
+                [f t])]
+    (not-any? #(legal-move? state %) moves)))
+
 
 (defn- moves-left
   [s p] (str "  " (name p) ":" (moves-left? s p)))
