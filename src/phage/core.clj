@@ -22,8 +22,7 @@
 
 (defn idx
   "Find index for row/column."
-  ([[row column]] (idx row column))
-  ([row column] (+ (* row n-columns) column)))
+  [row column] (+ (* row n-columns) column))
 
 (defn coord
   "Find row/column from index."
