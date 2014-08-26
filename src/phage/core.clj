@@ -71,16 +71,6 @@
   (when-some [piece (occupied? state xy)]
     (piece (player-pieces state))))
       
-(defn straight-line?
-  "Cheap check for ruling out illegal move destinations."
-  [from to]
-  (let [[x0 y0] (coord from)
-        [x1 y1] (coord to)]
-    (or
-     (= x0 x1)
-     (= y0 y1)
-     (= (- x1 x0) (- y1 y0)))))
-
 (defn- v [x] 
   (if (< x 0) -1 (if (> x 0) 1 0)))
 
@@ -96,24 +86,23 @@
   [idx [xd yd]]
   (+ idx (* xd n-rows) yd))
 
-(defn- path-free?
+(defn- clear-path?
   "Checks whether the path from one location to another is free."
   [state from to v]
   (let [pos1 (new-pos from v)]
-    (cond
-     (occupied? state pos1) false
-     (= to pos1) true
-     :else (recur state pos1 to v))))
+    (when (contains? (:cells state) pos1)
+      (cond
+       (occupied? state pos1) false
+       (= to pos1) true
+       :else (recur state pos1 to v)))))
 
 (defn legal-move?
   "Determines whether a move is legal."
   [state [from to]]
   (when-some [piece (occupied? state from)]
-    (when (contains? (:cells state) to)
-      (when (straight-line? from to)
-        (when (moves-left? state piece)
-          (when-some [v ((piece-vectors piece) (move-vector from to))]
-            (path-free? state from to v)))))))
+    (when (moves-left? state piece)
+      (when-some [v ((piece-vectors piece) (move-vector from to))]
+        (clear-path? state from to v)))))
 
 (defn successor
   "Perform a move. Returns the new state, or nil on error."
