@@ -24,11 +24,6 @@
   "Find index for row/column."
   [row column] (+ (* row n-columns) column))
 
-(defn coord
-  "Find row/column from index."
-  [idx]
-  [(quot idx n-columns) (rem idx n-columns)])
-
 (def ^:private init-cells 
   (-> (repeat (* n-rows n-columns) nil)
       (vec)
@@ -71,16 +66,18 @@
   (when-some [piece (occupied? state xy)]
     (piece (player-pieces state))))
       
-(defn- v [x] 
-  (if (< x 0) -1 (if (> x 0) 1 0)))
-
-(defn move-vector
+(defn- move-vector
   "Finds vector from move."
   [from to]
-  (let [[x0 y0] (coord from)
-        [x1 y1] (coord to) 
-        xd (- x1 x0) yd (- y1 y0)]
-    (idx (v xd) (v yd))))
+  (letfn [(v [x] (cond
+                  (< x 0) -1
+                  (> x 0) 1
+                  :else 0))
+          (coord [idx]
+            [(quot idx n-columns) (rem idx n-columns)])]
+    (let [[x0 y0] (coord from)
+          [x1 y1] (coord to)]
+      (idx (v (- x1 x0)) (v (- y1 y0))))))
 
 (defn- clear-path?
   "Checks whether the path from one location to another is free."
