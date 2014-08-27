@@ -32,7 +32,7 @@
 
 (deftest making-moves
   (testing "first move"
-    (let [s1 (successor start [0 1])]
+    (let [s1 (move start [0 1])]
       (is (= (-> s1 (:cells) (frequencies) { nil 55 :x 1
                                             :C 1 :S 1 :T 1 :D 1
                                             :c 1 :s 1 :t 1 :d 1})))
@@ -76,7 +76,7 @@
 
   (testing "after 1 move"
     (is (= (-> start
-               (successor [0 2])
+               (move [0 2])
                (to-string))
            (str "7 .......D\n"
                 "6 .....T..\n"
@@ -95,8 +95,8 @@
 
   (testing "after 2 moves"
     (is (= (-> start
-               (successor [0 2])
-               (successor [(idx 4 1) (idx 4 4)])
+               (move [0 2])
+               (move [(idx 4 1) (idx 4 4)])
                (to-string))
            (str "7 .......D\n"
                 "6 .....T..\n"

@@ -104,7 +104,7 @@
       (when-some [v ((piece-vectors piece) (move-vector from to))]
         (clear-path? state from to v)))))
 
-(defn successor
+(defn move
   "Perform a move. Returns the new state, or nil on error."
   [state [from to]]
   (when (legal-move? state [from to])
