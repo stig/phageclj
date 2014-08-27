@@ -53,7 +53,8 @@
   (testing "not a draw?"
     (let [s1 (-> start (assoc :moves-left {:T 1}))]
       (is (game-over? s1))
-      (is (not (draw? s1))))))
+      (is (not (draw? s1)))
+      (is (= (winner s1) 2)))))
 
 (deftest stringification
   (testing "starting position"

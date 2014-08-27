@@ -131,6 +131,11 @@
       (update-in [:history] (fn [x] (conj x [0 0])))
       (game-over?)))
 
+(defn winner
+  "Returns the winning player."
+  [state]
+  (- 2 (-> state (:history) (count) (rem 2))))
+
 (defn- moves-left
   [s p] (str "  " (name p) ":" (moves-left? s p)))
 
