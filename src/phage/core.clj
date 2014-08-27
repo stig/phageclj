@@ -8,8 +8,8 @@
        (map (fn [x] [x 7]))
        (into {})))
 
-(def ^:private diamond-vectors #{[1 0] [-1 0] [0 1] [0 -1]})
-(def ^:private square-vectors #{[1 1] [1 -1] [-1 -1] [-1 1]})
+(def ^:private diamond-vectors #{8 1 -1 -8})
+(def ^:private square-vectors #{9 7 -7 -9})
 (def ^:private circle-vectors (into square-vectors diamond-vectors))
 (def ^:private piece-vectors {:d diamond-vectors
                               :D diamond-vectors
@@ -17,8 +17,8 @@
                               :S square-vectors
                               :c circle-vectors
                               :C circle-vectors
-                              :t #{[0 -1] [0 1] [1 0]}
-                              :T #{[0 -1] [0 1] [-1 0]}})
+                              :t #{-1 1 8}
+                              :T #{-1 1 -8}})
 
 (defn idx
   "Find index for row/column."
@@ -80,16 +80,12 @@
   (let [[x0 y0] (coord from)
         [x1 y1] (coord to) 
         xd (- x1 x0) yd (- y1 y0)]
-    [(v xd) (v yd)]))
-
-(defn- new-pos
-  [idx [xd yd]]
-  (+ idx (* xd n-rows) yd))
+    (idx (v xd) (v yd))))
 
 (defn- clear-path?
   "Checks whether the path from one location to another is free."
   [state from to v]
-  (let [pos1 (new-pos from v)]
+  (let [pos1 (+ from v)]
     (when (contains? (:cells state) pos1)
       (cond
        (occupied? state pos1) false
@@ -120,7 +116,7 @@
   (let [moves (for [p (player-pieces state)
                     v (piece-vectors p)
                     :let [f (.indexOf (:cells start) p) 
-                          t (new-pos f v)]]
+                          t (+ f v)]]
                 [f t])]
     (not-any? #(legal-move? state %) moves)))
 
