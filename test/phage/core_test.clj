@@ -25,7 +25,7 @@
     (is (nil? (legal-move? start [0 (idx  1 1)])))
     (is (-> start
             (assoc-in [:legal-moves :d] 0)
-            (legal-move? [0 1])))    
+            (legal-move? [0 1])))
 
     (is (legal-move? start [(idx 6 5) (idx 6 4)]))
     (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))))

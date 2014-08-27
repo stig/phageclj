@@ -24,7 +24,7 @@
   "Find index for row/column."
   [row column] (+ (* row n-columns) column))
 
-(def ^:private init-cells 
+(def ^:private init-cells
   (-> (repeat (* n-rows n-columns) nil)
       (vec)
       (assoc (idx 7 7) :D)
@@ -33,11 +33,11 @@
       (assoc (idx 4 1) :C)
       (assoc (idx 3 6) :c)
       (assoc (idx 2 4) :s)
-      (assoc (idx 1 2) :t)      
+      (assoc (idx 1 2) :t)
       (assoc (idx 0 0) :d)))
 
 (def start
-  "The starting state." 
+  "The starting state."
   {:moves-left init-moves-left
    :cells init-cells
    :history []})
@@ -50,7 +50,7 @@
   "Return the number of moves left for a piece, or nil if not a piece."
   [state piece]
   ((:moves-left state) piece))
-                            
+
 (def player-1-pieces #{:c :d :s :t})
 (def player-2-pieces #{:C :D :S :T})
 
@@ -65,7 +65,7 @@
   [state xy]
   (when-some [piece (occupied? state xy)]
     (piece (player-pieces state))))
-      
+
 (defn- move-vector
   "Finds vector from move."
   [from to]
@@ -112,7 +112,7 @@
   [state]
   (let [moves (for [p (player-pieces state)
                     v (piece-vectors p)
-                    :let [f (.indexOf (:cells start) p) 
+                    :let [f (.indexOf (:cells start) p)
                           t (+ f v)]]
                 [f t])]
     (not-any? #(legal-move? state %) moves)))
@@ -142,14 +142,13 @@
                   (map #(apply str %))
                   (map-indexed (fn [i s] (str i " " s)))
                   (reverse))
-        
+
         cols ["  01234567\n"]
 
-        meta (-> [] 
+        meta (-> []
                  (conj (str (moves-left state :C) (moves-left state :c)))
                  (conj (str (moves-left state :S) (moves-left state :s)))
                  (conj (str (moves-left state :T) (moves-left state :t)))
                  (conj (str (moves-left state :D) (moves-left state :d))))]
-    
-    (clojure.string/join "\n" (concat rows cols meta))))
 
+    (clojure.string/join "\n" (concat rows cols meta))))
