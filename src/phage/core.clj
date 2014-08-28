@@ -93,9 +93,10 @@
   "Determines whether a move is legal."
   [state [from to]]
   (when-some [piece (occupied? state from)]
-    (when (moves-left? state piece)
-      (when-some [v ((piece-vectors piece) (move-vector from to))]
-        (clear-path? state from to v)))))
+    (when-some [mvs-left (moves-left? state piece)]
+      (when (< 0 mvs-left)
+       (when-some [v ((piece-vectors piece) (move-vector from to))]
+         (clear-path? state from to v))))))
 
 (defn move
   "Perform a move. Returns the new state, or nil on error."
