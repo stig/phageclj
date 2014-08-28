@@ -107,12 +107,27 @@
           (assoc-in [:cells from] (if (piece player-1-pieces) :x :X))
           (assoc-in [:cells to] piece)))))
 
+
+(defn index-of [st x] (.indexOf (:cells st) x))
+
+(defn moves
+  "Return all legal moves from this state."
+  [state]
+  (distinct
+   (for [p (player-pieces state)
+         v (piece-vectors p)
+         :let [f (index-of state p)]
+         t (drop 1 (iterate (partial + v) f))
+         :let [m [f t]]
+         :while (legal-move? state m)]
+     m)))
+
 (defn game-over?
   "Returns true if game is over."
   [state]
   (let [moves (for [p (player-pieces state)
                     v (piece-vectors p)
-                    :let [f (.indexOf (:cells start) p)
+                    :let [f (index-of state p)
                           t (+ f v)]]
                 [f t])]
     (not-any? #(legal-move? state %) moves)))

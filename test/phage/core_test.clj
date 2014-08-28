@@ -28,7 +28,11 @@
             (legal-move? [0 1])))
 
     (is (legal-move? start [(idx 6 5) (idx 6 4)]))
-    (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))))
+    (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))
+
+    (is (= (count (moves start)) 61))
+    (is (every? (partial legal-move? start) (moves start)))
+))
 
 (deftest making-moves
   (testing "first move"
