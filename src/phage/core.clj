@@ -108,7 +108,7 @@
           (assoc-in [:cells to] piece)))))
 
 
-(defn index-of [st x] (.indexOf (:cells st) x))
+(defn- index-of [st x] (.indexOf (:cells st) x))
 
 (defn moves
   "Return all legal moves from this state."
