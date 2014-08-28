@@ -92,11 +92,12 @@
 (defn legal-move?
   "Determines whether a move is legal."
   [state [from to]]
-  (when-some [piece (occupied? state from)]
-    (when-some [mvs-left (moves-left? state piece)]
-      (when (< 0 mvs-left)
-       (when-some [v ((piece-vectors piece) (move-vector from to))]
-         (clear-path? state from to v))))))
+  (when (player-turn? state from)
+   (when-some [piece (occupied? state from)]
+     (when-some [mvs-left (moves-left? state piece)]
+       (when (< 0 mvs-left)
+         (when-some [v ((piece-vectors piece) (move-vector from to))]
+           (clear-path? state from to v)))))))
 
 (defn move
   "Perform a move. Returns the new state, or nil on error."
@@ -104,6 +105,7 @@
   (when (legal-move? state [from to])
     (let [piece (occupied? state from)]
       (-> state
+          (update-in [:history] #(conj % [from to]))
           (update-in [:moves-left piece] dec)
           (assoc-in [:cells from] (if (piece player-1-pieces) :x :X))
           (assoc-in [:cells to] piece)))))

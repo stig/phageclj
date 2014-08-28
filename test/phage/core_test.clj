@@ -27,24 +27,26 @@
              (assoc-in [:moves-left :d] 0)
              (legal-move? [0 1]))))
 
-    (is (legal-move? start [(idx 6 5) (idx 6 4)]))
-    (is (nil? (legal-move? start [(idx 6 5) (idx 7 5)])))
+    (is (legal-move? start [(idx 1 2) (idx 2 2)]))
+    (is (nil? (legal-move? start [(idx 1 2) (idx 0 2)])))
 
     (is (= (count (moves start)) 61))
     (is (every? (partial legal-move? start) (moves start)))
 
-    (is (= 38 (count (moves (-> start (assoc-in [:moves-left :c] 0))))))
-))
+    (is (= 38 (count (moves (-> start (assoc-in [:moves-left :c] 0))))))))
 
 (deftest making-moves
   (testing "first move"
     (let [s1 (move start [0 1])]
-      (is (= (-> s1 (:cells) (frequencies) { nil 55 :x 1
-                                            :C 1 :S 1 :T 1 :D 1
-                                            :c 1 :s 1 :t 1 :d 1})))
+      (is (= (-> s1 :cells frequencies) { nil 55 :x 1
+                                         :C 1 :S 1 :T 1 :D 1
+                                         :c 1 :s 1 :t 1 :d 1}))
+      (is (= [[0 1]] (-> s1 :history)))
+      (is (= 6 (-> s1 :moves-left :d)))
       (is (= (occupied? s1 0) :x))
       (is (= (occupied? s1 1) :d))
-      (is (not (legal-move? s1 [1 0]))))))
+      (is (not (legal-move? s1 [1 0])))
+      (is (not (legal-move? s1 [1 2]))))))
 
 (deftest game-over
   (testing "nowhere to go"
