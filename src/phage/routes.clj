@@ -3,6 +3,7 @@
             [compojure.route :refer [resources not-found]]
             [org.httpkit.server :refer [run-server]]
             [phage.views :refer [index-page]]
+            [ring.middleware.reload :as reload]
             [ring.util.response :refer [redirect]]))
 
 (defroutes main-routes
@@ -20,9 +21,10 @@
     (reset! server nil)))
 
 (defn -main [& args]
-  (let [port 8080]
+  (let [port 8080
+        handler (reload/wrap-reload #'main-routes)]
     ;; The #' is useful, when you want to hot-reload code
     ;; You may want to take a look: https://github.com/clojure/tools.namespace
     ;; and http://http-kit.org/migration.html#reload
-    (reset! server (run-server #'main-routes {:port port}))
+    (reset! server (run-server handler {:port port}))
     (println (str "Started server on http://localhost:" port))))

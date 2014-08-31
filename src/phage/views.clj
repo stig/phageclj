@@ -6,9 +6,9 @@
   []
   (html5
    [:head
-    [:title "Hello World"]
-    (include-js "/js/react-0.10.0.js")
-    (include-js "/js/phage.js")]
+    [:title "Hello World"]]
    [:body
     [:h1 "Hello World"]
-    [:p "This is a paragraph."]]))
+    [:p "This is a paragraph."]
+    [:div#main]
+    (include-js "/js/phage.js")]))
