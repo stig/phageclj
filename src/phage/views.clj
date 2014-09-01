@@ -6,9 +6,8 @@
   []
   (html5
    [:head
-    [:title "Hello World"]]
+    [:title "Phage Match"]]
    [:body
-    [:h1 "Hello World"]
-    [:p "This is a paragraph."]
+    [:h1 "Phage Match"]
     [:div#main]
     (include-js "/js/phage.js")]))
