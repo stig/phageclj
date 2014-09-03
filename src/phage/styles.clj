@@ -60,8 +60,7 @@
             :height (px 50)
             :display :table-cell
             :vertical-align :middle
-            :text-align :center
-            :border {:style :solid :width (px 1)}}])
+            :border [[(px 1) :solid]]}])
 
 (def line [:.line
            {:display :table-row}])
