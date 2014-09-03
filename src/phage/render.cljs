@@ -8,13 +8,28 @@
    :cells [:d nil nil nil nil nil nil nil nil nil :t nil nil nil nil nil nil nil nil nil :s nil nil nil nil nil nil nil nil nil :c nil nil :C nil nil nil nil nil nil nil nil nil :S nil nil nil nil nil nil nil nil nil :T nil nil nil nil nil nil nil nil nil :D],
    :history []})
 
+(def piece-map {:C 'circle2
+                :D 'diamond2
+                :S 'square2
+                :T 'triangle2
+                :X 'blocked2
+
+                :c 'circle1
+                :d 'diamond1
+                :s 'square1
+                :t 'triangle1
+                :x 'blocked1
+
+                nil 'empty})
+
+
 (def ^:private *match* (atom *initial*))
 
-(defn cell [cell]
+(defn cell [piece]
   [:div.cell
-   (cond
-    (keyword? cell) (name cell)
-    :else ".")])
+   (if piece
+     [(keyword (str "div." (piece-map piece)))]
+     "")])
 
 (defn line [cells]
   [:div.line
