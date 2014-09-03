@@ -14,14 +14,19 @@
                  [ring/ring-core "1.1.8"]
                  [ring/ring-devel "1.1.8"]]
 
-  :plugins [[lein-cljsbuild "1.0.3"]]
+  :plugins [[lein-garden "0.2.0"]
+            [lein-cljsbuild "1.0.3"]]
 
-  :hooks [leiningen.cljsbuild]
+  :hooks [leiningen.cljsbuild leiningen.garden]
 
   :cljsbuild {:builds [{:source-paths ["src"]
                         :compiler {:preamble ["reagent/react.js"]
                                    :output-to "target/classes/public/js/phage.js"
                                    :optimizations :whitespace
                                    :pretty-print true}}]}
+
+  :garden {:builds [{:stylesheet phage.styles/screen
+                     :compiler {:output-to "target/classes/public/css/styles.css"
+                                :pretty-print? false}}]}
 
   :main phage.routes)

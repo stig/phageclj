@@ -1,18 +1,13 @@
 (ns phage.routes
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
-            [garden.core :refer [css]]
             [org.httpkit.server :refer [run-server]]
             [phage.views :refer [index-page]]
-            [phage.styles :as styles]
             [ring.middleware.reload :as reload]
             [ring.util.response :refer [redirect]]))
 
 (defroutes main-routes
   (GET "/" [] (index-page))
-  (GET "/css/styles.css" []
-       {:headers {"Content-Type" "text/css"}
-        :body (css styles/screen)})
   (route/resources "/")
   (route/not-found "Page not found"))
 
