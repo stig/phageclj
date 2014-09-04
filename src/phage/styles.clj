@@ -38,15 +38,15 @@
    :border-right [[(px 22.5) :solid :transparent]]
    (if (= dir :up) :border-bottom :border-top) [[(px 45) :solid colour]]})
 
-(def pieces [[:.square1 (square :red)]
-             [:.circle1 (circle :red)]
-             [:.triangle1 (triangle :up :red)]
-             [:.diamond1 (diamond :red)]
+(def pieces [[:.s (square :red)]
+             [:.c (circle :red)]
+             [:.t (triangle :up :red)]
+             [:.d (diamond :red)]
 
-             [:.square2 (square :blue)]
-             [:.circle2 (circle :blue)]
-             [:.triangle2 (triangle :down :blue)]
-             [:.diamond2 (diamond :blue)]])
+             [:.S (square :blue)]
+             [:.C (circle :blue)]
+             [:.T (triangle :down :blue)]
+             [:.D (diamond :blue)]])
 
 (def cell [:.cell
            {:width (px 50)
