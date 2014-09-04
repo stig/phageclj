@@ -17,29 +17,30 @@
     ""))
 
 (defn cell
-  [piece]
-  [:div.cell (piece? piece)])
+  [idx piece]
+  ^{:key idx} [:div.cell (piece? piece)])
 
-(defn line [cells]
-  [:div.line
-   (map cell cells)])
+(defn line
+  [idx cells]
+  ^{:key idx} [:div.line
+               (map-indexed cell cells)])
 
 (defn grid [cells]
   [:div.grid
    (->> cells
         (partition 8)
         (reverse)
-        (map line))])
+        (map-indexed line))])
 
 (defn moves-left-row
-  [piece]
-  [:div.moves-left-row
-   [:div.moves-left-cell (piece? piece)]])
+  [idx piece]
+  ^{:key idx} [:div.moves-left-row
+               [:div.moves-left-cell (piece? piece)]])
 
 (defn moves-left
   [pieces]
   [:div.moves-left
-   (map moves-left-row pieces)])
+   (map-indexed moves-left-row pieces)])
 
 (defn board []
   [:div.board
