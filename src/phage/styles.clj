@@ -49,12 +49,17 @@
    [:.T (triangle :down :blue)]
    [:.D (diamond :blue)]])
 
-(def moves-left-cell
+(def moves-left-piece
   {:width (px 50)
    :height (px 50)
    :display :table-cell
    :vertical-align :middle
    :border [[(px 2) :solid :transparent]]})
+
+(def moves-left-count
+  {:border [[(px 2) :solid :transparent]]
+   :display :table-cell
+   :vertical-align :middle})
 
 (def cell
   {:width (px 50)
@@ -86,6 +91,7 @@
    [:.left (column :top)]
    [:.middle (column :middle)]
    [:.right (column :bottom)]
-   [:.moves-left-cell moves-left-cell]
+   [:.moves-left-piece moves-left-piece]
+   [:.moves-left-count moves-left-count]
    [pieces]]
   )
