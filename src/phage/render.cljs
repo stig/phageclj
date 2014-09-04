@@ -10,15 +10,16 @@
 
 (def ^:private *match* (atom *initial*))
 
-(defn piece?
+(defn piece-div
   [piece]
-  (if piece
-    [(keyword (str "div." (name piece)))]
-    ""))
+  [(keyword (str "div." (name piece)))])
 
 (defn cell
   [idx piece]
-  ^{:key idx} [:div.cell (piece? piece)])
+  ^{:key idx} [:div.cell
+               (if piece
+                 (piece-div piece)
+                 "")])
 
 (defn line
   [idx cells]
@@ -35,7 +36,7 @@
 (defn moves-left-row
   [idx piece]
   ^{:key idx} [:div.moves-left-row
-               [:div.moves-left-cell (piece? piece)]])
+               [:div.moves-left-cell (piece-div piece)]])
 
 (defn moves-left
   [pieces]
