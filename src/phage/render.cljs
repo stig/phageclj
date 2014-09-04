@@ -10,11 +10,15 @@
 
 (def ^:private *match* (atom *initial*))
 
-(defn cell [piece]
-  [:div.cell
-   (if piece
-     [(keyword (str "div." (name piece)))]
-     "")])
+(defn piece?
+  [piece]
+  (if piece
+    [(keyword (str "div." (name piece)))]
+    ""))
+
+(defn cell
+  [piece]
+  [:div.cell (piece? piece)])
 
 (defn line [cells]
   [:div.line
@@ -27,9 +31,21 @@
         (reverse)
         (map line))])
 
+(defn moves-left-row
+  [piece]
+  [:div.moves-left-row
+   [:div.moves-left-cell (piece? piece)]])
+
+(defn moves-left
+  [pieces]
+  [:div.moves-left
+   (map moves-left-row pieces)])
+
 (defn board []
   [:div.board
-   [grid (:cells @*match*)]]
+   [:div.left [moves-left [:D :T :S :C]]]
+   [:div.middle [grid (:cells @*match*)]]
+   [:div.right [moves-left [:c :s :t :d]]]]
 )
 
 (reagent/render-component [board] (.getElementById js/document "main"))

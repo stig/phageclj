@@ -38,32 +38,54 @@
    :border-right [[(px 22.5) :solid :transparent]]
    (if (= dir :up) :border-bottom :border-top) [[(px 45) :solid colour]]})
 
-(def pieces [[:.s (square :red)]
-             [:.c (circle :red)]
-             [:.t (triangle :up :red)]
-             [:.d (diamond :red)]
+(def pieces
+  [[:.s (square :red)]
+   [:.c (circle :red)]
+   [:.t (triangle :up :red)]
+   [:.d (diamond :red)]
 
-             [:.S (square :blue)]
-             [:.C (circle :blue)]
-             [:.T (triangle :down :blue)]
-             [:.D (diamond :blue)]])
+   [:.S (square :blue)]
+   [:.C (circle :blue)]
+   [:.T (triangle :down :blue)]
+   [:.D (diamond :blue)]])
 
-(def cell [:.cell
-           {:width (px 50)
-            :height (px 50)
-            :display :table-cell
-            :vertical-align :middle
-            :border [[(px 1) :solid]]}])
+(def moves-left-cell
+  {:width (px 50)
+   :height (px 50)
+   :display :table-cell
+   :vertical-align :middle
+   :border [[(px 2) :solid :transparent]]})
 
-(def line [:.line
-           {:display :table-row}])
+(def cell
+  {:width (px 50)
+   :height (px 50)
+   :display :table-cell
+   :vertical-align :middle
+   :border [[(px 1) :solid]]})
 
-(def grid [:.grid
-           {:display :table
-            :border-spacing (px 2)}])
+(def line
+  {:display :table-row})
+
+(def grid
+  {:display :table
+   :border-spacing (px 2)})
+
+(def board
+  {:display :table})
+
+(defn column
+  [valign]
+  {:display :table-cell
+   :vertical-align valign})
 
 (defstyles screen
-  [[grid]
-   [line]
-   [cell]
-   [pieces]])
+  [[:.board board]
+   [:.grid grid]
+   [:.line line]
+   [:.cell cell]
+   [:.left (column :top)]
+   [:.middle (column :middle)]
+   [:.right (column :bottom)]
+   [:.moves-left-cell moves-left-cell]
+   [pieces]]
+  )
