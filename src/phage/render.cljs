@@ -33,11 +33,22 @@
         (reverse)
         (map-indexed line))])
 
+(defn make-mark
+  [mrk]
+  [(keyword (str "div.moves-left-mark." mrk))])
+
+(defn moves-left-count
+  [cnt]
+  (let [counters (concat
+                  (repeat cnt "unnused")
+                  (repeat (- 7 cnt) "used"))]
+    (->> counters (map make-mark))))
+
 (defn moves-left-row
   [idx [piece count]]
   ^{:key idx} [:div.moves-left-row
                [:div.moves-left-piece (piece-div piece)]
-               [:div.moves-left-count count]])
+               [:div.moves-left-count (moves-left-count count)]])
 
 (defn moves-left-column
   [pieces moves-left]

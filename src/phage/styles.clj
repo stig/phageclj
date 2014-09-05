@@ -54,12 +54,20 @@
    :height (px 50)
    :display :table-cell
    :vertical-align :middle
-   :border [[(px 2) :solid :transparent]]})
+   :border [[(px 1) :solid :transparent]]})
 
 (def moves-left-count
-  {:border [[(px 2) :solid :transparent]]
-   :display :table-cell
+  {:display :table-cell
    :vertical-align :middle})
+
+(def moves-left-mark
+  {:height (px 50)
+   :width (px 5)
+   :display :table-cell})
+
+(def used {:background :gray })
+
+(def unnused {:background :white})
 
 (def cell
   {:width (px 50)
@@ -88,10 +96,13 @@
    [:.grid grid]
    [:.line line]
    [:.cell cell]
-   [:.left (column :top)]
+   [:.left (column :top) {:border-spacing (px 1)}]
    [:.middle (column :middle)]
-   [:.right (column :bottom)]
+   [:.right (column :bottom) {:border-spacing (px 1)}]
    [:.moves-left-piece moves-left-piece]
    [:.moves-left-count moves-left-count]
+   [:.moves-left-mark moves-left-mark]
+   [:.used used]
+   [:.unnused unnused]
    [pieces]]
   )
