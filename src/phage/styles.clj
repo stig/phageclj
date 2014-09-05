@@ -49,6 +49,13 @@
    [:.T (triangle :down :blue)]
    [:.D (diamond :blue)]])
 
+(def moves-left
+  {:display :table
+   :border-spacing (px 2)})
+
+(def moves-left-row
+  {:display :table-row})
+
 (def moves-left-piece
   {:width (px 50)
    :height (px 50)
@@ -58,10 +65,11 @@
 
 (def moves-left-count
   {:display :table-cell
+   :border [[(px 1) :solid :transparent]]
    :vertical-align :middle})
 
 (def moves-left-mark
-  {:height (px 50)
+  {:height (px 45)
    :width (px 5)
    :display :table-cell})
 
@@ -96,13 +104,14 @@
    [:.grid grid]
    [:.line line]
    [:.cell cell]
-   [:.left (column :top) {:border-spacing (px 1)}]
+   [:.left (column :top)]
    [:.middle (column :middle)]
-   [:.right (column :bottom) {:border-spacing (px 1)}]
+   [:.right (column :bottom)]
+   [:.moves-left moves-left]
+   [:.moves-left-row moves-left-row]
    [:.moves-left-piece moves-left-piece]
    [:.moves-left-count moves-left-count]
    [:.moves-left-mark moves-left-mark]
    [:.used used]
    [:.unnused unnused]
-   [pieces]]
-  )
+   [pieces]])
