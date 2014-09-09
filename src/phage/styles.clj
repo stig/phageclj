@@ -1,33 +1,38 @@
 (ns phage.styles
   (:require [garden.color :as colour :refer [rgb]]
             [garden.def :refer [defstyles]]
-            [garden.units :refer [px px-]]))
+            [garden.units :refer [px px- px-div percent]]))
 
 (def red (rgb 255 0 0))
 (def blue (rgb 0 0 255))
 
+(def cell-size (px 50))
+(def piece-size (px 45))
+(def half-piece-size (px-div piece-size 2))
+(def diamond-size (px 33))
+
 (defn square
   [colour]
-  {:width (px 45)
-   :height (px 45)
+  {:width piece-size
+   :height piece-size
    :margin-left :auto
    :margin-right :auto
    :background colour})
 
 (defn circle
   [colour]
-  {:width (px 45)
-   :height (px 45)
+  {:width piece-size
+   :height piece-size
    :margin-left :auto
    :margin-right :auto
-   :border-radius (px 50)
+   :border-radius piece-size
    :background colour})
 
 (defn diamond
   [colour]
   {:background colour
-   :width (px 33)
-   :height (px 33)
+   :width diamond-size
+   :height diamond-size
    :margin-left :auto
    :margin-right :auto
    :-webkit-transform "rotate(45deg)"}  )
@@ -38,13 +43,14 @@
    :height 0
    :margin-left :auto
    :margin-right :auto
-   :border-left [[(px 22.5) :solid :transparent]]
-   :border-right [[(px 22.5) :solid :transparent]]
-   (if (= dir :up) :border-bottom :border-top) [[(px 45) :solid colour]]})
+   :border-left [[half-piece-size :solid :transparent]]
+   :border-right [[half-piece-size :solid :transparent]]
+   (if (= dir :up) :border-bottom :border-top) [[piece-size :solid colour]]})
 
 (defn blocked
   [c]
-  {:height (px 50)
+  {:height (percent 100)
+   :width (percent 100)
    :background (colour/lighten c 30)})
 
 (def pieces
@@ -68,8 +74,8 @@
   {:display :table-row})
 
 (def moves-left-piece
-  {:width (px 50)
-   :height (px 50)
+  {:width cell-size
+   :height cell-size
    :display :table-cell
    :vertical-align :middle
    :border [[(px 1) :solid :transparent]]})
@@ -80,7 +86,7 @@
    :vertical-align :middle})
 
 (def moves-left-mark
-  {:height (px 45)
+  {:height piece-size
    :width (px 5)
    :display :table-cell})
 
@@ -89,8 +95,8 @@
 (def unnused {:background :white})
 
 (def cell
-  {:width (px 50)
-   :height (px 50)
+  {:width cell-size
+   :height cell-size
    :display :table-cell
    :vertical-align :middle
    :border [[(px 1) :solid]]})
