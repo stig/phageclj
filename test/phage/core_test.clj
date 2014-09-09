@@ -47,13 +47,6 @@
       (is (not (legal-move? s1 [[0 1] [0 0]])))
       (is (not (legal-move? s1 [[0 1] [0 2]]))))))
 
-(defn apply-moves [state moves]
-  (if (game-over? state)
-    state
-    (if (seq moves)
-      state
-      (recur (move state (first moves)) (rest moves)))))
-
 (deftest game-over
   (testing "nowhere to go"
     (let [s0 start
