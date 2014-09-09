@@ -109,7 +109,7 @@
 (defn game-over?
   "Returns true if game is over."
   [state]
-  (= 0 (count (moves state))))
+  (empty? (moves state)))
 
 (defn draw?
   "Returns true if the game is a draw."
