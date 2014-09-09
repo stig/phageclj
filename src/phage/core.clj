@@ -81,13 +81,16 @@
 (defn moves
   "Return all legal moves from this state."
   [state]
-  (for [p (player-pieces state)
-        v (piece-vectors p)
-        :when (< 0 (moves-left? state p))
-        :let [f ((:lookup state) p)]
-        t (rest (iterate (partial add v) f))
-        :while (and (contains? (:grid state) t) (not (occupied? state t)))]
-    [f t]))
+  (let [grid (:grid state)
+        lookup (:lookup state)]
+    (for [p (player-pieces state)
+          v (piece-vectors p)
+          :when (< 0 (moves-left? state p))
+          :let [f (lookup p)]
+          t (drop 1 (take n-rows (iterate (partial add v) f)))
+          :when (contains? grid t)
+          :when (nil? (grid t))]
+      [f t])))
 
 (defn legal-move?
   "Determines whether a move is legal."
