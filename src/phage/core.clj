@@ -78,19 +78,23 @@
   [[x y] [dx dy]]
   [(+ x dx) (+ y dy)])
 
+(defn- moves-along-vector
+  [grid origin v]
+  (for [t (->> (iterate (partial add v) origin)
+               (drop 1)
+               (take-while #(contains? grid %)))
+        :while (nil? (grid t))]
+    [origin t]))
+
 (defn moves
   "Return all legal moves from this state."
   [state]
-  (let [grid (:grid state)
-        lookup (:lookup state)]
-    (for [p (player-pieces state)
-          v (piece-vectors p)
-          :when (< 0 (moves-left? state p))
-          :let [f (lookup p)]
-          t (drop 1 (take n-rows (iterate (partial add v) f)))
-          :when (contains? grid t)
-          :when (nil? (grid t))]
-      [f t])))
+  (apply concat
+         (for [p (player-pieces state)
+               v (piece-vectors p)
+               :when (< 0 (moves-left? state p))
+               :let [f ((:lookup state) p)]]
+           (moves-along-vector (:grid state) f v))))
 
 (defn legal-move?
   "Determines whether a move is legal."
