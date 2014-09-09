@@ -1,6 +1,10 @@
 (ns phage.styles
-  (:require [garden.def :refer [defstyles]]
+  (:require [garden.color :as colour :refer [rgb]]
+            [garden.def :refer [defstyles]]
             [garden.units :refer [px px-]]))
+
+(def red (rgb 255 0 0))
+(def blue (rgb 0 0 255))
 
 (defn square
   [colour]
@@ -38,16 +42,23 @@
    :border-right [[(px 22.5) :solid :transparent]]
    (if (= dir :up) :border-bottom :border-top) [[(px 45) :solid colour]]})
 
-(def pieces
-  [[:.s (square :red)]
-   [:.c (circle :red)]
-   [:.t (triangle :up :red)]
-   [:.d (diamond :red)]
+(defn blocked
+  [c]
+  {:height (px 50)
+   :background (colour/lighten c 30)})
 
-   [:.S (square :blue)]
-   [:.C (circle :blue)]
-   [:.T (triangle :down :blue)]
-   [:.D (diamond :blue)]])
+(def pieces
+  [[:.s (square red)]
+   [:.c (circle red)]
+   [:.t (triangle :up red)]
+   [:.d (diamond red)]
+   [:.x (blocked red)]
+
+   [:.S (square blue)]
+   [:.C (circle blue)]
+   [:.T (triangle :down blue)]
+   [:.D (diamond blue)]
+   [:.X (blocked blue)]])
 
 (def moves-left
   {:display :table
