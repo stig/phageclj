@@ -114,17 +114,17 @@
           (assoc-in [:grid to] piece)))))
 
 
-(defn- apply-moves [state moves]
+(defn game-over?
+  "Returns true if game is over."
+  [state]
+  (empty? (moves state)))
+
+(defn apply-moves [state moves]
   (if (game-over? state)
     state
     (if (seq moves)
       state
       (recur (move state (first moves)) (rest moves)))))
-
-(defn game-over?
-  "Returns true if game is over."
-  [state]
-  (empty? (moves state)))
 
 (defn draw?
   "Returns true if the game is a draw."
