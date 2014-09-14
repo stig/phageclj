@@ -9,7 +9,8 @@
     (is (not (:game-over? p)))
     (is (= (-> p :grid vals) (-> start :grid vals)))
     (is (= (-> p :history) (:history start)))
-    (is (= (-> p :moves-left) (:moves-left start)))))
+    (is (= (-> p :moves-left) (:moves-left start)))
+    (is (= (-> p :legal-moves count) 61))))
 
 (deftest game-over
   (let [m (loop [s start]

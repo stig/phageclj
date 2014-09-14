@@ -7,4 +7,5 @@
   (-> state
       (assoc-in [:game-over?] (game-over? state))
       (assoc-in [:draw?] (draw? state))
-      (assoc-in [:winner] (winner state))))
+      (assoc-in [:winner] (winner state))
+      (assoc-in [:legal-moves] (into #{} (moves state)))))
