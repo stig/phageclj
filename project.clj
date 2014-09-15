@@ -10,6 +10,7 @@
                  [garden "1.2.1"]
                  [hiccup "1.0.5"]
                  [http-kit "2.1.16"]
+                 [jarohen/chord "0.4.2" :exclusions [org.clojure/clojure]]
                  [reagent "0.4.2"]
                  [ring/ring-core "1.1.8"]
                  [ring/ring-devel "1.1.8"]]
