@@ -4,6 +4,7 @@
             [garden.units :refer [px px- px-div percent]]))
 
 (def red (rgb 255 0 0))
+(def green (rgb 0 155 0))
 (def blue (rgb 0 0 255))
 
 (def cell-size (px 50))
@@ -109,7 +110,8 @@
    :border-spacing (px 2)})
 
 (def board
-  {:display :table})
+  {:display :table
+   :background green})
 
 (defn column
   [valign]
