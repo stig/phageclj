@@ -29,7 +29,6 @@
           [x y])
         (map cells)
         (partition 8)
-        (reverse)
         (map-indexed line))])
 
 (defn make-mark
