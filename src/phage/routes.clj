@@ -1,10 +1,10 @@
 (ns phage.routes
   (:require [chord.http-kit :refer [wrap-websocket-handler]]
-            [clojure.core.async :refer [<! >! put! close! go-loop go]]
+            [clojure.core.async :refer [<! >! put! close! go-loop go timeout]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [org.httpkit.server :refer [run-server]]
-            [phage.core :refer [start]]
+            [phage.core :refer [start game-over? move moves to-string]]
             [phage.prep :refer [prep]]
             [phage.views :refer [index-page]]
             [ring.middleware.reload :as reload]
@@ -14,9 +14,11 @@
   "Handler for Websockets connection"
   [{:keys [ws-channel] :as req}]
   (println "Opened connection from " (:remote-addr req))
-  (let [match start]
-    (go
-      (when (>! ws-channel (prep start))))))
+  (go-loop [match start]
+    (when (>! ws-channel (prep match))
+      (when-not (game-over? match)
+        (<! (timeout 500))
+        (recur (move match (rand-nth (moves match))))))))
 
 (defroutes main-routes
   (GET "/" [] (index-page))

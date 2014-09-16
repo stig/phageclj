@@ -71,5 +71,7 @@
         {:keys [ws-channel error]} (<! (ws-ch url))]
     (if error
       (prn "couldn't open websocket connection: " error)
-      (when-let [{:keys [message]} (<! ws-channel)]
-        (reagent/render-component [render-board message] container)))))
+      (go-loop []
+        (when-let [{:keys [message]} (<! ws-channel)]
+          (reagent/render-component [render-board message] container)
+          (recur))))))
