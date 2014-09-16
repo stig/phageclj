@@ -16,9 +16,17 @@
                  [ring/ring-devel "1.1.8"]]
 
   :plugins [[lein-garden "0.2.0"]
-            [lein-cljsbuild "1.0.3"]]
+            [lein-cljsbuild "1.0.3"]
+            [lein-pdo "0.1.1"]
+            [lein-shell "0.4.0"]]
 
-  :hooks [leiningen.cljsbuild leiningen.garden]
+  :aliases {"dev" ["do"
+                   ["shell" "mkdir" "-p"
+                    "target/resources"]
+                   ["pdo"
+                    ["cljsbuild" "auto"]
+                    ["garden" "auto"]
+                    "run"]]}
 
   :cljsbuild {:builds [{:source-paths ["src"]
                         :compiler {:preamble ["reagent/react.js"]
