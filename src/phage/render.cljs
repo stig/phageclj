@@ -56,7 +56,7 @@
         (map #(vector % (% moves-left)))
         (map-indexed moves-left-row))])
 
-(defn render-board
+(defn board
   [match]
   (let [{cells :grid, moves-left :moves-left} match]
     [:div.board
@@ -64,13 +64,16 @@
      [:div.middle [grid cells]]
      [:div.right [moves-left-column [:c :s :t :d] moves-left]]]))
 
-(go
-  (let [url "ws://localhost:8080/ws"
-        container (.getElementById js/document "main")
-        {:keys [ws-channel error]} (<! (ws-ch url))]
-    (if error
-      (prn "couldn't open websocket connection: " error)
-      (go-loop []
-        (when-let [{:keys [message]} (<! ws-channel)]
-          (reagent/render-component [render-board message] container)
-          (recur))))))
+
+(defn ^:export run
+  []
+  (go
+    (let [url "ws://localhost:8080/ws"
+          container (.getElementById js/document "main")
+          {:keys [ws-channel error]} (<! (ws-ch url))]
+      (if error
+        (prn "couldn't open websocket connection: " error)
+        (go-loop []
+          (when-let [{:keys [message]} (<! ws-channel)]
+            (reagent/render-component [board message] container)
+            (recur)))))))

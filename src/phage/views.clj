@@ -11,4 +11,5 @@
    [:body
     [:h1 "Phage Match"]
     [:div#main]
-    (include-js "/js/phage.js")]))
+    (include-js "/js/phage.js")
+    [:script {:type "text/javascript"} "phage.render.run();"]]))
