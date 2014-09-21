@@ -4,21 +4,35 @@
             [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [org.httpkit.server :refer [run-server]]
-            [phage.core :refer [start game-over? move moves to-string]]
+            [phage.core :refer [start game-over? move moves to-string player-turn]]
             [phage.prep :refer [prep]]
             [phage.views :refer [index-page]]
             [ring.middleware.reload :as reload]
             [ring.util.response :refer [redirect]]))
 
+(def clients (atom {}))
+
 (defn ws-handler
   "Handler for Websockets connection"
   [{:keys [ws-channel] :as req}]
-  (println "Opened connection from " (:remote-addr req))
-  (go-loop [match start]
-    (when (>! ws-channel (prep match))
-      (when-not (game-over? match)
-        (<! (timeout 500))
-        (recur (move match (rand-nth (moves match))))))))
+  (let [addr (:remote-addr req)]
+    (swap! clients assoc addr true)
+    (println "Opened connection from " addr)
+    (go-loop [match start]
+      (when (>! ws-channel (prep match))
+        (when-not (game-over? match)
+          (let [mv (if (= 1 (player-turn match))
+                     (do
+                       (println "Pausing before picking random move")
+                       (<! (timeout 1000))
+                       (rand-nth (moves match)))
+                     (do
+                       (println "Waiting for user move")
+                       (<! ws-channel)))]
+            (println "Move: " mv)
+            (recur (move match mv))))))
+    (println "Client disconnected: " addr)
+    (swap! clients dissoc addr)))
 
 (defroutes main-routes
   (GET "/" [] (index-page))

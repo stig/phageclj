@@ -61,9 +61,14 @@
   [state piece]
   (-> state :moves-left piece))
 
+(defn player-turn
+  "Return 1 or 2, depending on whose turn it is"
+  [state]
+  (-> state :history count (rem 2) inc))
+
 (defn player-pieces
   [state]
-  (if (= 0 (-> state :history count (rem 2)))
+  (if (= 1 (player-turn state))
     player-1-pieces
     player-2-pieces))
 
