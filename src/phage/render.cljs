@@ -57,12 +57,16 @@
         (map-indexed moves-left-row))])
 
 (defn board
-  [match]
+  [match ch]
   (let [{:keys [grid moves-left legal-moves]} match]
-    [:div.board
-     [:div.left [moves-left-column [:D :T :S :C] moves-left]]
-     [:div.middle [cells grid]]
-     [:div.right [moves-left-column [:c :s :t :d] moves-left]]]))
+    [:div
+     [:div.board
+      [:div.left [moves-left-column [:D :T :S :C] moves-left]]
+      [:div.middle [cells grid]]
+      [:div.right [moves-left-column [:c :s :t :d] moves-left]]]
+     [:input {:type "button"
+              :value "Make Random Move"
+              :on-click #(put! ch (first legal-moves))}]]))
 
 
 (defn ^:export run
@@ -75,5 +79,5 @@
         (prn "couldn't open websocket connection: " error)
         (go-loop []
           (when-let [{:keys [message]} (<! ws-channel)]
-            (reagent/render-component [board message] container)
+            (reagent/render-component [board message ws-channel] container)
             (recur)))))))

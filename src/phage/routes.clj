@@ -28,9 +28,11 @@
                        (rand-nth (moves match)))
                      (do
                        (println "Waiting for user move")
-                       (<! ws-channel)))]
+                       (:message (<! ws-channel))))]
             (println "Move: " mv)
-            (recur (move match mv))))))
+            (recur (if mv
+                     (move match mv)
+                     match))))))
     (println "Client disconnected: " addr)
     (swap! clients dissoc addr)))
 
