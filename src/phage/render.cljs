@@ -22,7 +22,7 @@
   ^{:key idx} [:div.line
                (map-indexed cell cells)])
 
-(defn grid [cells]
+(defn cells [cells]
   [:div.grid
    (->> (for [x (reverse (range 8))
               y (range 8)]
@@ -58,10 +58,10 @@
 
 (defn board
   [match]
-  (let [{cells :grid, moves-left :moves-left} match]
+  (let [{:keys [grid moves-left legal-moves]} match]
     [:div.board
      [:div.left [moves-left-column [:D :T :S :C] moves-left]]
-     [:div.middle [grid cells]]
+     [:div.middle [cells grid]]
      [:div.right [moves-left-column [:c :s :t :d] moves-left]]]))
 
 
